@@ -9,7 +9,6 @@ export async function POST(req: NextRequest) {
   try {
     const { messages } = await req.json()
 
-    // Format the conversation for the summary prompt
     const conversationText = messages
       .map((m: { role: string; content: string }) =>
         `${m.role === 'user' ? 'משתתף' : 'בוט'}: ${m.content}`
@@ -18,23 +17,28 @@ export async function POST(req: NextRequest) {
 
     const response = await client.messages.create({
       model: 'claude-opus-4-6',
-      max_tokens: 800,
+      max_tokens: 1000,
       system: `אתה מנתח שיחה מסדנה על מנהיגות פוליטית.
-המשימה: לייצר סיכום מובנה של השיחה עבור המשתתף.
+המשימה: לייצר סיכום שהמשתתף יקרא ויגיד "זה אני בדיוק".
 
-החזר JSON בלבד, ללא כל טקסט נוסף. המבנה המדויק:
+כללים:
+- כתוב בעברית טבעית ואישית
+- כל משפט בסיכום חייב להתבסס על משהו שנאמר בפועל בשיחה
+- היה ספציפי: "כשאמרת ש..." או "הבחירה שלך ב..." — לא כללי
+- אל תכתוב דברים שיכולים להתאים לכל אחד
+- הסיכום צריך להסביר את ההיגיון: למה הגעת למסקנה הזו
+
+החזר JSON בלבד, בלי כל טקסט נוסף:
 {
-  "headline": "כותרת קצרה ומדויקת (עד 8 מילים) שמתארת את הפרסונה הפוליטית של המשתתף",
-  "cognitive_style": "פסקה אחת (3-4 משפטים) על סגנון החשיבה — כיצד המשתתף מתמודד עם אי-ודאות, קונפליקט קוגניטיבי, צורך בסגירה",
-  "values_pattern": "פסקה אחת (3-4 משפטים) על הדפוס הערכי — אילו ערכים גוברים כשיש קונפליקט, מה מניע את ההחלטות",
-  "open_question": "שאלה אחת פתוחה ומדויקת לקחת הביתה, מבוססת על מה שעלה בשיחה"
-}
-
-כתוב בעברית. היה ספציפי, לא כללי. אל תתיוג — תאר דפוסים.`,
+  "headline": "כותרת קצרה (עד 7 מילים) שמגדירה את הפרסונה — חדה ומדויקת, לא כללית",
+  "cognitive_style": "2-3 משפטים על סגנון החשיבה. חייב לציין דוגמה ספציפית מהשיחה. תסביר מה ראית ולמה זה מעיד על סגנון כזה.",
+  "values_pattern": "2-3 משפטים על הדפוס הערכי. ציין את הקונפליקט הספציפי שהתגלה ואיזה ערך גבר. הסבר את ההיגיון.",
+  "open_question": "שאלה אחת חדה שנובעת ישירות ממה שנאמר בשיחה — לא שאלה גנרית על מנהיגות"
+}`,
       messages: [
         {
           role: 'user',
-          content: `הנה השיחה המלאה:\n\n${conversationText}\n\nצור את הסיכום המובנה.`,
+          content: `השיחה המלאה:\n\n${conversationText}\n\nצור סיכום מדויק ואישי, מבוסס על מה שנאמר בפועל.`,
         },
       ],
     })
@@ -44,8 +48,6 @@ export async function POST(req: NextRequest) {
       throw new Error('No text in response')
     }
 
-    // Parse the JSON from Claude's response
-    // Claude sometimes wraps JSON in markdown code blocks
     let jsonText = textBlock.text.trim()
     if (jsonText.startsWith('```')) {
       jsonText = jsonText.replace(/^```json?\n?/, '').replace(/\n?```$/, '')
@@ -58,9 +60,9 @@ export async function POST(req: NextRequest) {
     return Response.json(
       {
         headline: 'מנהיג עם זהות ערכית ברורה',
-        cognitive_style: 'לא ניתן לייצר סיכום אוטומטי. השיחה שלך הייתה עשירה ומעניינת.',
-        values_pattern: 'נסה שוב בעוד רגע.',
-        open_question: 'מה גרם לך לעצור ולחשוב הכי הרבה במהלך השיחה הזו?',
+        cognitive_style: 'לא ניתן לייצר סיכום. נסה שוב.',
+        values_pattern: 'לא ניתן לייצר סיכום. נסה שוב.',
+        open_question: 'מה גרם לך לעצור ולחשוב הכי הרבה במהלך השיחה?',
       },
       { status: 200 }
     )
