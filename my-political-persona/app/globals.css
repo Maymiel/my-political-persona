@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Heebo', sans-serif;
+  direction: rtl;
+}
+
+/* Typing animation */
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+  40% { transform: scale(1.2); opacity: 1; }
+}
+
+.typing-dot {
+  width: 8px;
+  height: 8px;
+  background: #1BAED9;
+  border-radius: 50%;
+  display: inline-block;
+  animation: bounce 1.4s infinite ease-in-out;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.16s; }
+.typing-dot:nth-child(3) { animation-delay: 0.32s; }
+
+/* Print styles for summary */
+@media print {
+  body > * { display: none !important; }
+  .print-summary { display: block !important; }
+  .no-print { display: none !important; }
+}
+
+.print-summary {
+  display: none;
+}
+
+/* Smooth scrolling for chat */
+.chat-scroll {
+  scroll-behavior: smooth;
+}
+
+/* Message text with proper line breaks */
+.message-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
