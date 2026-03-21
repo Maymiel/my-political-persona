@@ -274,15 +274,14 @@ function SummaryScreen({
               </div>
             )}
 
-            {summary.archetype_name && (
-              <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-                <p className="text-[#1BAED9] font-semibold text-sm mb-4">📍 מיקום על הצירים</p>
-                <div className="flex flex-col gap-4">
-                  <AxisBar value={summary.axis_x} leftLabel="שייכות" rightLabel="עצמאות" color="#1BAED9" />
-                  <AxisBar value={summary.axis_y} leftLabel="יציבות" rightLabel="שינוי" color="#E3001B" />
-                </div>
-              </div>
-            )}
+          {summary.archetype_name && (
+  <DriverExplanation
+    driver={summary.driver_hebrew}
+    axisX={summary.axis_x}
+    axisY={summary.axis_y}
+  />
+)}
+
 
             {summary.promise && (
               <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
