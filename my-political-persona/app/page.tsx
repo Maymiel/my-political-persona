@@ -53,33 +53,45 @@ function TypingIndicator() {
   )
 }
 
-function AxisBar({
-  value,
-  leftLabel,
-  rightLabel,
-  color,
+function DriverExplanation({
+  driver,
+  axisX,
+  axisY,
 }: {
-  value: number
-  leftLabel: string
-  rightLabel: string
-  color: string
+  driver: string
+  axisX: number
+  axisY: number
 }) {
-  const pct = ((value - 1) / 4) * 80 + 10
+  const explanations: Record<string, string> = {
+    'עצמאות ומימוש': 'הכוח שלך מגיע מתוך ערכים, אמת וגילוי — פחות מהצורך להשתייך, יותר מהצורך לפעול לפי מה שנראה לך נכון.',
+    'שייכות והנאה': 'הכוח שלך מגיע מחיבור לאנשים — היכולת לגרום לאנשים להרגיש שייכים ולשמור על הרקמה החברתית.',
+    'יציבות ושליטה': 'הכוח שלך מגיע מאחריות למוסדות ולסדר — לבנות, לשמור ולהגן על מה שקיים.',
+    'סיכון ושינוי': 'הכוח שלך מגיע מנכונות לנטול סיכונים — לפעול גם כשהתוצאה לא וודאית, כדי לחולל שינוי אמיתי.',
+  }
+
+  const xText = axisX <= 2 ? 'שייכות וקהילה' : axisX >= 4 ? 'עצמאות ומימוש' : 'שייכות ועצמאות'
+  const yText = axisY <= 2 ? 'יציבות ושמירה' : axisY >= 4 ? 'שינוי ונטילת סיכונים' : 'יציבות ושינוי'
+
   return (
-    <div>
-      <div className="flex justify-between text-xs text-gray-400 mb-1">
-        <span>{leftLabel}</span>
-        <span>{rightLabel}</span>
-      </div>
-      <div className="h-2 bg-gray-100 rounded-full relative">
-        <div
-          className="absolute w-4 h-4 rounded-full top-1/2 -translate-y-1/2 -translate-x-1/2 shadow-sm"
-          style={{ left: `${pct}%`, backgroundColor: color }}
-        />
+    <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+      <p className="text-[#1BAED9] font-semibold text-sm mb-3">📍 מה מניע אותך</p>
+      <p className="text-gray-700 text-sm leading-relaxed mb-3">
+        {explanations[driver] ?? 'מנוע עמוק שמכתיב את אופן הפעולה שלך.'}
+      </p>
+      <div className="flex flex-col gap-1 pt-3 border-t border-gray-100">
+        <p className="text-xs text-gray-500">
+          <span className="text-[#1BAED9] font-medium">שייכות ↔ עצמאות: </span>
+          {xText}
+        </p>
+        <p className="text-xs text-gray-500">
+          <span className="text-[#E3001B] font-medium">יציבות ↔ שינוי: </span>
+          {yText}
+        </p>
       </div>
     </div>
   )
 }
+
 
 function LandingScreen({ onStart }: { onStart: () => void }) {
   return (
