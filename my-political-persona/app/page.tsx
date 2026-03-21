@@ -17,9 +17,9 @@ interface Summary {
 }
 
 const INITIAL_BOT_MESSAGE = `בוא נעשה משהו קצת שונה.
-אשאל אותך ארבעה תרחישים. אחרי כל אחד — שאלה אחת.
+ארבעה תרחישים. אחרי כל אחד — שאלה או שתיים.
 אין נכון ואין לא נכון.
-בסוף אציע לך שתי הצעות על מה ששמעתי — ואתה תגיד לי אם הן מרגישות נכון.
+בסוף אציע לך מה שאני שומע — ואתה תגיד לי אם זה נוחת.
 מוכן?`
 
 // ---- Logo Component ----
@@ -104,7 +104,6 @@ function ChatScreen({
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value)
-    // Auto-resize
     const el = e.target
     el.style.height = 'auto'
     el.style.height = Math.min(el.scrollHeight, 120) + 'px'
@@ -150,7 +149,6 @@ function ChatScreen({
           </div>
         ))}
 
-        {/* Typing indicator — shown when loading and last message is not empty assistant */}
         {isLoading && messages[messages.length - 1]?.content === '' && (
           <div className="flex justify-end">
             <TypingIndicator />
@@ -214,7 +212,7 @@ function SummaryScreen({
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-start py-8 px-4">
-      {/* Print version (hidden on screen, visible in print) */}
+      {/* Print version */}
       <div className="print-summary fixed inset-0 bg-white p-8" id="print-area">
         <div style={{ direction: 'rtl', fontFamily: 'Heebo, sans-serif' }}>
           <h1 style={{ color: '#1BAED9', fontSize: '24px', fontWeight: 'bold', marginBottom: '8px' }}>
@@ -266,37 +264,20 @@ function SummaryScreen({
           </div>
         ) : summary ? (
           <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-            {/* Headline */}
             <div className="bg-[#1BAED9] px-6 py-5">
               <p className="text-white text-xs font-medium mb-1 opacity-80">הכותרת שלך</p>
               <h2 className="text-white text-xl font-bold leading-tight">{summary.headline}</h2>
             </div>
-
-            {/* Cards */}
             <div className="p-5 flex flex-col gap-5">
-              <SummarySection
-                title="סגנון קוגניטיבי"
-                content={summary.cognitive_style}
-                icon="🧭"
-              />
+              <SummarySection title="סגנון קוגניטיבי" content={summary.cognitive_style} icon="🧭" />
               <div className="h-px bg-gray-100" />
-              <SummarySection
-                title="דפוס ערכי"
-                content={summary.values_pattern}
-                icon="⚖️"
-              />
+              <SummarySection title="דפוס ערכי" content={summary.values_pattern} icon="⚖️" />
               <div className="h-px bg-gray-100" />
-              <SummarySection
-                title="שאלה לקחת הביתה"
-                content={summary.open_question}
-                icon="💡"
-                italic
-              />
+              <SummarySection title="שאלה לקחת הביתה" content={summary.open_question} icon="💡" italic />
             </div>
           </div>
         ) : null}
 
-        {/* Buttons */}
         <div className="flex flex-col gap-3 mt-5">
           <button
             onClick={handlePrint}
