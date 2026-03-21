@@ -26,10 +26,6 @@ interface Summary {
 
 const INITIAL_MESSAGE = `לפני שנתחיל — איך לפנות אליך?
 בלשון זכר או נקבה?`
-ארבעה תרחישים. אחרי כל אחד — שאלה או שתיים.
-אין נכון ואין לא נכון.
-בסוף אציע לך מה שאני שומע — ואתה תגיד לי אם זה נוחת.
-מוכן?`
 
 function Logo({ size = 80 }: { size?: number }) {
   return (
@@ -57,7 +53,17 @@ function TypingIndicator() {
   )
 }
 
-function AxisBar({ value, leftLabel, rightLabel, color }: { value: number; leftLabel: string; rightLabel: string; color: string }) {
+function AxisBar({
+  value,
+  leftLabel,
+  rightLabel,
+  color,
+}: {
+  value: number
+  leftLabel: string
+  rightLabel: string
+  color: string
+}) {
   const pct = ((value - 1) / 4) * 80 + 10
   return (
     <div>
@@ -81,7 +87,9 @@ function LandingScreen({ onStart }: { onStart: () => void }) {
       <div className="w-full max-w-sm flex flex-col items-center gap-6 text-center">
         <Logo size={88} />
         <div>
-          <h1 className="text-3xl font-bold text-[#1BAED9] mb-3 leading-tight">הפרסונה הפוליטית שלי</h1>
+          <h1 className="text-3xl font-bold text-[#1BAED9] mb-3 leading-tight">
+            הפרסונה הפוליטית שלי
+          </h1>
           <p className="text-gray-500 text-base leading-relaxed">
             שיחה של כ-10 דקות שחושפת את הדפוס שמנהל אותך בזירה הציבורית
           </p>
@@ -90,7 +98,7 @@ function LandingScreen({ onStart }: { onStart: () => void }) {
           onClick={onStart}
           className="w-full bg-[#1BAED9] hover:bg-[#1599c0] text-white font-semibold text-lg py-4 px-8 rounded-2xl transition-colors duration-200 shadow-md"
         >
-          בואי נתחיל
+          בואו נתחיל
         </button>
         <p className="text-gray-400 text-sm">כ-10 דקות • אין תשובות נכונות</p>
       </div>
@@ -181,7 +189,7 @@ function ChatScreen({
           <p className="text-xs text-center text-gray-400 mb-2">
             השיחה הגיעה לעומק.{' '}
             <button onClick={onEnd} className="text-[#1BAED9] hover:underline">
-              לחץ כאן לפרופיל שלך
+              לחצו כאן לפרופיל שלכם
             </button>
           </p>
         )}
@@ -191,7 +199,7 @@ function ChatScreen({
             value={input}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
-            placeholder="כתוב את תשובתך..."
+            placeholder="הקלידו את תשובתכם..."
             disabled={isLoading}
             rows={1}
             className="flex-1 resize-none border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-[#1BAED9] disabled:bg-gray-50 leading-relaxed max-h-[120px] overflow-y-auto"
@@ -243,7 +251,6 @@ function SummaryScreen({
         ) : summary ? (
           <div className="flex flex-col gap-4">
 
-            {/* Archetype Header */}
             {summary.archetype_name && (
               <div className="bg-[#1BAED9] rounded-3xl px-6 py-5 text-white">
                 <p className="text-xs font-medium opacity-70 mb-1">הארכיטיפ הפוליטי שלך</p>
@@ -255,28 +262,16 @@ function SummaryScreen({
               </div>
             )}
 
-            {/* Axes */}
             {summary.archetype_name && (
               <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
                 <p className="text-[#1BAED9] font-semibold text-sm mb-4">📍 מיקום על הצירים</p>
                 <div className="flex flex-col gap-4">
-                  <AxisBar
-                    value={summary.axis_x}
-                    leftLabel="שייכות"
-                    rightLabel="עצמאות"
-                    color="#1BAED9"
-                  />
-                  <AxisBar
-                    value={summary.axis_y}
-                    leftLabel="יציבות"
-                    rightLabel="שינוי"
-                    color="#E3001B"
-                  />
+                  <AxisBar value={summary.axis_x} leftLabel="שייכות" rightLabel="עצמאות" color="#1BAED9" />
+                  <AxisBar value={summary.axis_y} leftLabel="יציבות" rightLabel="שינוי" color="#E3001B" />
                 </div>
               </div>
             )}
 
-            {/* Promise */}
             {summary.promise && (
               <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
                 <p className="text-[#1BAED9] font-semibold text-sm mb-2">🎯 ההבטחה הפוליטית שלך</p>
@@ -284,12 +279,11 @@ function SummaryScreen({
               </div>
             )}
 
-            {/* Personal profile */}
             <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
               <p className="text-[#1BAED9] font-semibold text-sm mb-3">🧠 מה אני שומע</p>
               <p className="text-gray-800 text-sm font-medium leading-relaxed mb-3">{summary.headline}</p>
               {summary.cognitive_style && (
-                <div className="mb-2">
+                <div className="mb-3">
                   <p className="text-xs text-gray-400 mb-1">סגנון חשיבה</p>
                   <p className="text-gray-700 text-sm leading-relaxed">{summary.cognitive_style}</p>
                 </div>
@@ -302,7 +296,6 @@ function SummaryScreen({
               )}
             </div>
 
-            {/* Shadow */}
             {summary.shadow && (
               <div className="bg-amber-50 rounded-2xl p-5 border border-amber-100">
                 <p className="text-amber-700 font-semibold text-sm mb-2">⚠️ הצל שלך</p>
@@ -310,7 +303,6 @@ function SummaryScreen({
               </div>
             )}
 
-            {/* Open question */}
             {summary.open_question && (
               <div className="bg-gray-50 rounded-2xl p-5 border border-gray-200">
                 <p className="text-gray-400 text-xs mb-2">שאלה שנשארת פתוחה</p>
@@ -318,7 +310,6 @@ function SummaryScreen({
               </div>
             )}
 
-            {/* Key quote */}
             {summary.key_quote && (
               <div className="bg-gray-50 rounded-2xl p-5 border border-gray-200">
                 <p className="text-gray-400 text-xs mb-2">מה שאמרת שסימן אותך</p>
@@ -384,7 +375,10 @@ export default function Home() {
     } catch {
       setMessages((prev) => {
         const updated = [...prev]
-        updated[updated.length - 1] = { role: 'assistant', content: 'מצטערת, הייתה שגיאה. נסי שוב.' }
+        updated[updated.length - 1] = {
+          role: 'assistant',
+          content: 'מצטערת, הייתה שגיאה. נסי שוב.',
+        }
         return updated
       })
     } finally {
@@ -444,5 +438,7 @@ export default function Home() {
         onEnd={generateSummary}
       />
     )
-  return <SummaryScreen summary={summary} isLoading={isSummaryLoading} onReset={handleReset} />
+  return (
+    <SummaryScreen summary={summary} isLoading={isSummaryLoading} onReset={handleReset} />
+  )
 }
